@@ -24,8 +24,5 @@ $readbleArray = parseJsonArray($data);
 $i=0;
 foreach($readbleArray as $row){
   $i++;
-	$db->exec("update tbl_menu set parent = '".$row['parentID']."', sort = '".$i."' where id = '".$row['id']."' ");
+	$db->exec("update menus set parent = '".$row['parentID']. "', ordering = '".$i."' where id = '".$row['id']."' ");
 }
-
-
-?>

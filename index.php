@@ -47,25 +47,18 @@ require_once 'config.php';
     <br /><br />
 
     <div class="cf nestable-lists">
-
         <div class="dd" id="nestable">
-
             <?php
-
-            $query = $db->query("select * from tbl_menu order by sort ");
-
+            $query = $db->query("select * from menus order by ordering");
             $ref   = [];
             $items = [];
 
             while ($data = $query->fetch(PDO::FETCH_OBJ)) {
-
                 $thisRef = &$ref[$data->id];
-
                 $thisRef['parent'] = $data->parent;
-                $thisRef['label'] = $data->label;
-                $thisRef['link'] = $data->link;
+                $thisRef['label'] = $data->menu_name;
+                $thisRef['link'] = $data->menu_link;
                 $thisRef['id'] = $data->id;
-
                 if ($data->parent == 0) {
                     $items[$data->id] = &$thisRef;
                 } else {
@@ -79,11 +72,11 @@ require_once 'config.php';
                 $html = "<ol class=\"" . $class . "\" id=\"menu-id\">";
                 foreach ($items as $key => $value) {
                     $html .= '<li class="dd-item dd3-item" data-id="' . $value['id'] . '" >
-                    <div class="dd-handle dd3-handle">Drag</div>
-                    <div class="dd3-content"><span id="label_show' . $value['id'] . '">' . $value['label'] . '</span> 
-                        <span class="span-right">/<span id="link_show' . $value['id'] . '">' . $value['link'] . '</span> &nbsp;&nbsp; 
-                            <a class="edit-button" id="' . $value['id'] . '" label="' . $value['label'] . '" link="' . $value['link'] . '" ><i class="fa fa-pencil"></i></a>
-                            <a class="del-button" id="' . $value['id'] . '"><i class="fa fa-trash"></i></a></span> 
+                    <div class="dd-handle dd3-handle"><i class="fa-solid fa-grip-vertical"></i></div>
+                    <div class="dd3-content"><i class="fa-solid fa-grip-vertical"></i><span id="label_show' . $value['id'] . '">' . $value['label'] . '</span> 
+                        <span id="link_show' . $value['id'] . '">' . $value['link'] . '</span>
+                        <span class="span-right"><a class="edit-button" id="' . $value['id'] . '" label="' . $value['label'] . '" link="' . $value['link'] . '" ><button type="button" class="btn btn-outline-warning btn-sm"><i class="fa fa-pencil"></i></button></a>
+                            <a class="del-button" id="' . $value['id'] . '"><button type="button" class="btn btn-outline-danger btn-sm"><i class="fa fa-trash"></i></button></a></span> 
                     </div>';
                     if (array_key_exists('child', $value)) {
                         $html .= get_menu($value['child'], 'child');
